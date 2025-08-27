@@ -2,6 +2,8 @@ package com.project.EcomProductService.service;
 
 import com.project.EcomProductService.client.FakeStoreClient;
 import com.project.EcomProductService.dtos.FakeStoreProductResponseDTO;
+import com.project.EcomProductService.exception.NoProductPresentException;
+import com.project.EcomProductService.exception.ProductNotFoundException;
 import com.project.EcomProductService.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,20 +14,29 @@ import java.util.List;
 public class FakeStoreProductServiceImpl implements ProductService{
 
     @Autowired
-    FakeStoreClient fakeStoreClient;
+    FakeStoreClient fakeStoreClient;  //field injection
 
     @Override
-    public List<FakeStoreProductResponseDTO> getAllProducts() {
+    public List<FakeStoreProductResponseDTO> getAllProducts() {  //to get all the products
 
         //it will call getAllProducts of client and return list
        List<FakeStoreProductResponseDTO> fakeStoreProducts = fakeStoreClient.getAllProducts();
 
-        return fakeStoreProducts;
+       if(fakeStoreProducts == null){   //check if the list is empty
+           throw new NoProductPresentException("No Products are found");
+       }
+       return fakeStoreProducts;
     }
 
     @Override
-    public Product getProduct(int productId) {
-        return null;
+    public FakeStoreProductResponseDTO getProduct(int productId) throws ProductNotFoundException {  //to get product by id
+
+       FakeStoreProductResponseDTO fakeStoreProductResponseDTO = fakeStoreClient.getProductById(productId);
+
+       if(fakeStoreProductResponseDTO == null){
+           throw new ProductNotFoundException("Product not found with id = "+productId);
+       }
+        return fakeStoreProductResponseDTO;
     }
 
     @Override
