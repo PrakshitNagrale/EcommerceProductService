@@ -12,7 +12,7 @@ public class ProductControllerExceptionHandler {
 
 
     @ExceptionHandler({ProductNotFoundException.class,NoProductPresentException.class})
-    public ResponseEntity<ExceptionResponseDTO> handleNoProductException(ProductNotFoundException  pe){
+    public ResponseEntity<ExceptionResponseDTO> handleNoProductException(ProductPresentException  pe){
 
         ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO(
                 pe.getMessage(), 404);

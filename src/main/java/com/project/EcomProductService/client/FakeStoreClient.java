@@ -2,6 +2,7 @@ package com.project.EcomProductService.client;
 
 import com.project.EcomProductService.dtos.FakeStoreCartResponseDTO;
 import com.project.EcomProductService.dtos.FakeStoreProductResponseDTO;
+import com.project.EcomProductService.exception.InvalidInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -55,6 +56,11 @@ public class FakeStoreClient {
 
     public List<FakeStoreCartResponseDTO> getCartForUser(int userId) { //to get cart for user id
                                         //https://fakestoreapi.com/carts?userId=1
+
+        if(userId < 1){
+            throw new InvalidInputException("Invalid user Id: "+userId);
+        }
+
         if(userId < 1)
             return null;
         String fakeStoreGetCartForUser = fakeStoreAPIBaseUrl.concat(fakeStoreAPICartForUser).concat(String.valueOf(userId));

@@ -1,13 +1,12 @@
 package com.project.EcomProductService.controller;
 
 import com.project.EcomProductService.dtos.FakeStoreProductResponseDTO;
-import com.project.EcomProductService.exception.InvalidInputException;
+import com.project.EcomProductService.models.Product;
 import com.project.EcomProductService.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,6 +14,7 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
+    @Qualifier("productServiceImpl")
     private ProductService productService; //field base injection
 
     @GetMapping("/product")
@@ -28,13 +28,20 @@ public class ProductController {
     @GetMapping("/product/{id}")
     public ResponseEntity<FakeStoreProductResponseDTO> getProductById(@PathVariable("id") int id){
 
-        if(id<1){
-            throw new InvalidInputException("Input is not Correct");
-        }
 
         FakeStoreProductResponseDTO product = productService.getProduct(id);
 
         return ResponseEntity.ok(product);
+
+    }
+
+    //to create product in db
+    @PostMapping("/product")
+    public ResponseEntity create(@RequestBody Product product){
+
+        Product savedProduct = productService.createProduct(product);
+
+        return ResponseEntity.ok(savedProduct);
 
     }
 

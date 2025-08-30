@@ -2,6 +2,7 @@ package com.project.EcomProductService.service;
 
 import com.project.EcomProductService.client.FakeStoreClient;
 import com.project.EcomProductService.dtos.FakeStoreProductResponseDTO;
+import com.project.EcomProductService.exception.InvalidInputException;
 import com.project.EcomProductService.exception.NoProductPresentException;
 import com.project.EcomProductService.exception.ProductNotFoundException;
 import com.project.EcomProductService.models.Product;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@Service("fakeStoreProductServiceImpl")
 public class FakeStoreProductServiceImpl implements ProductService{
 
     @Autowired
@@ -31,7 +32,10 @@ public class FakeStoreProductServiceImpl implements ProductService{
     @Override
     public FakeStoreProductResponseDTO getProduct(int productId) throws ProductNotFoundException {  //to get product by id
 
-       FakeStoreProductResponseDTO fakeStoreProductResponseDTO = fakeStoreClient.getProductById(productId);
+        if(productId<1){
+            throw new InvalidInputException("Input is not Correct");
+        }
+        FakeStoreProductResponseDTO fakeStoreProductResponseDTO = fakeStoreClient.getProductById(productId);
 
        if(fakeStoreProductResponseDTO == null){
            throw new ProductNotFoundException("Product not found with id = "+productId);
