@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@MappedSuperclass       //it will not create any table in db,only inherit the attributes to the class that extends
+@MappedSuperclass       //it will not create any table in db,only put the attributes to the class
 public abstract class BaseModel {
 
     @Id                 //it will map the field as primary key in db
@@ -21,6 +21,7 @@ public abstract class BaseModel {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+   // OR @GeneratedValue(strategy = GenerationType.AUTO) -->this is specifically related to mysql
     private UUID id;
 
     @CreationTimestamp              //it will automatically put the date & time in db
